@@ -6,17 +6,24 @@ from flask_socketio import SocketIO, emit
 import asyncio
 import threading
 import pytz
-import random 
+import random
 import os
 from voices_manager import TTSManager
+import configparser
 
-TWITCH_CHANNEL_NAME = 'dougdoug' # Replace this with your channel name
+# Set up secrets
+_config = configparser.ConfigParser()
+_pth = os.path.join(os.path.expanduser('~'), '.api_keys')
+_config.read(_pth)
+TWITCH_ACCESS_TOKEN = _config['Twitch']['ACCESS_TOKEN']
+
+TWITCH_CHANNEL_NAME = 'boisvert42' # Replace this with your channel name
 
 socketio = SocketIO
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode="threading")
 print(socketio.async_mode)
- 
+
 @app.route("/")
 def home():
     return render_template('index.html') #redirects to index.html in templates folder
@@ -95,8 +102,8 @@ class Bot(commands.Bot):
         self.tts_manager = TTSManager()
 
         #connects to twitch channel
-        super().__init__(token=os.getenv('TWITCH_ACCESS_TOKEN'), prefix='?', initial_channels=[TWITCH_CHANNEL_NAME])
-    
+        super().__init__(token=TWITCH_ACCESS_TOKEN, prefix='?', initial_channels=[TWITCH_CHANNEL_NAME])
+
     async def event_ready(self):
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
@@ -171,8 +178,8 @@ class Bot(commands.Bot):
                     print(f"{oldest_user} was popped due to hitting max users")
                 else:
                     print(f"{oldest_user} was popped due to not talking for {self.seconds_active} seconds")
-                
-                
+
+
     #picks a random user from the queue
     def randomUser(self, user_number):
         try:
@@ -214,9 +221,9 @@ def startTwitchBot():
     twitchbot.run()
 
 if __name__=='__main__':
-    
+
     # Creates and runs the twitchio bot on a separate thread
     bot_thread = threading.Thread(target=startTwitchBot)
     bot_thread.start()
-    
+
     socketio.run(app)
