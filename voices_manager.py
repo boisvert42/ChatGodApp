@@ -25,7 +25,7 @@ class TTSManager:
             self.user2_voice_name = voice_name
         elif user_number == "3":
             self.user3_voice_name = voice_name
-        
+
     def update_voice_style(self, user_number, voice_style):
         if user_number == "1":
             self.user1_voice_style = voice_style
@@ -48,18 +48,17 @@ class TTSManager:
         tts_file = self.azuretts_manager.text_to_audio(text, voice_name, voice_style)
 
         # OPTIONAL: Use OBS Websockets to enable the Move plugin filter
-        if user_number == "1":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 1", True)
-        elif user_number == "2":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 2", True)
-        elif user_number == "3":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 3", True)
-
+        # if user_number == "1":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 1", True)
+        # elif user_number == "2":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 2", True)
+        # elif user_number == "3":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 3", True)
+        #
         self.audio_manager.play_audio(tts_file, True, True, True)
-
-        if user_number == "1":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 1", False)
-        elif user_number == "2":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 2", False)
-        elif user_number == "3":
-            self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 3", False)
+        # if user_number == "1":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 1", False)
+        # elif user_number == "2":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 2", False)
+        # elif user_number == "3":
+        #     self.obswebsockets_manager.set_filter_visibility("Line In", "Audio Move - DnD Player 3", False)
